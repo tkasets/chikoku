@@ -55,9 +55,6 @@
     container-type:size;
     position:relative;
   }
-  .doc-wrap:active .doc{
-    transform:scale(.99);
-  }
   /* でき上がった書類の画像を、元の書類にぴったり重ねて表示（長押し/右クリックで保存） */
   #docImage{
     position:absolute;
@@ -346,12 +343,12 @@ function renderDocImage(){
       docImage.alt = '早退届';
       docWrap.appendChild(docImage);
     }
-    const w = docWrap.getBoundingClientRect(), c = docCard.getBoundingClientRect();
+    // offset系（docWrap基準の等倍座標）でぴったり重ねる
     docImage.src = canvas.toDataURL('image/png');
-    docImage.style.left   = (c.left - w.left) + 'px';
-    docImage.style.top    = (c.top  - w.top ) + 'px';
-    docImage.style.width  = c.width  + 'px';
-    docImage.style.height = c.height + 'px';
+    docImage.style.left   = docCard.offsetLeft + 'px';
+    docImage.style.top    = docCard.offsetTop  + 'px';
+    docImage.style.width  = docCard.offsetWidth  + 'px';
+    docImage.style.height = docCard.offsetHeight + 'px';
   });
 }
 function removeDocImage(){ if(docImage){ docImage.remove(); docImage = null; } }
