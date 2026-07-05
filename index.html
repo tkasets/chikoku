@@ -252,7 +252,6 @@
 
   .actions{
     display:block;
-    visibility:hidden;
     width:100%;
     max-width:400px;
     margin-top:6px;
@@ -260,7 +259,7 @@
   #saveHint{
     margin:0;
     text-align:center;
-    font-family:'Zen Kaku Gothic New', sans-serif;
+    font-family:'Yu Mincho','YuMincho','Hiragino Mincho ProN','MS Mincho',serif;
     font-weight:700;
     font-size:12px;
     letter-spacing:.04em;
@@ -298,7 +297,7 @@
   </div>
 
   <div class="actions" id="actionsArea">
-    <p id="saveHint">📸 書類を長押しで写真に保存（PCは右クリック）</p>
+    <p id="saveHint">書類を長押しで写真に保存（PCは右クリック）</p>
   </div>
 
 <script>
@@ -415,7 +414,6 @@ docWrap.addEventListener('click', ()=>{
 });
 
 function revealFinish(){
-  actionsArea.style.visibility = "visible";
   renderDocImage();
   if(stamp){
     stamp.classList.remove('show');
@@ -427,7 +425,6 @@ function revealFinish(){
 function resetToSpinning(){
   phase = 0;
   pickedA = ""; pickedB = "";
-  actionsArea.style.visibility = "hidden";
   removeDocImage();
   if(stamp){ stamp.classList.remove('show'); }
   startReels();
