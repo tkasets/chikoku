@@ -63,6 +63,9 @@
     position:absolute;
     z-index:5;
     box-shadow:0 1px 3px rgba(0,0,0,.08), 0 8px 20px rgba(0,0,0,.06);
+    -webkit-touch-callout:default; /* 長押しで「画像を保存」メニューを出す */
+    -webkit-user-select:none;
+    user-select:none;
   }
   .doc{
     background:#FFFFFF;
@@ -76,6 +79,8 @@
     flex-direction:column;
     justify-content:center;
     overflow:hidden;
+    -webkit-user-select:none; /* 書類の文字を選択不可にし、長押しでテキストコピーされるのを防ぐ */
+    user-select:none;
     box-shadow:0 1px 3px rgba(0,0,0,.08), 0 8px 20px rgba(0,0,0,.06);
     transition:transform .08s ease;
     font-size:min(2.028cqw, 2.868cqh);
