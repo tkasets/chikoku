@@ -6,7 +6,7 @@
 <title>早退届ジェネレーター</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.js"></script>
 <style>
   :root{
     --paper:#F4F4F2;
@@ -336,7 +336,16 @@ let docImage = null, rerenderTimer = null;
 // 表示されるのは本物の<img>なので、長押し（PCは右クリック）で写真に保存できる。
 function renderDocImage(){
   docCard.style.visibility = ''; // 撮影のため確実に表示
-  html2canvas(docCard, {backgroundColor:"#FFFFFF", scale:3}).then(canvas=>{
+  const ow = docCard.offsetWidth, oh = docCard.offsetHeight;
+  // html-to-image はブラウザ自身の描画を使うので、生書類と見た目が完全一致し切替時にズレて見えない
+  htmlToImage.toPng(docCard, {
+    pixelRatio: 3,
+    backgroundColor: '#FFFFFF',
+    width: ow,
+    height: oh,
+    style: { transform: 'none' },
+    skipFonts: true
+  }).then(dataUrl=>{
     if(phase !== 2) return; // 途中でリセットされたら破棄
     if(!docImage){
       docImage = document.createElement('img');
@@ -345,13 +354,13 @@ function renderDocImage(){
       docWrap.appendChild(docImage);
     }
     // offset系（docWrap基準の等倍座標）でぴったり重ねる
-    docImage.src = canvas.toDataURL('image/png');
+    docImage.src = dataUrl;
     docImage.style.left   = docCard.offsetLeft + 'px';
     docImage.style.top    = docCard.offsetTop  + 'px';
     docImage.style.width  = docCard.offsetWidth  + 'px';
     docImage.style.height = docCard.offsetHeight + 'px';
     docCard.style.visibility = 'hidden'; // 生書類は隠し、画像だけを見せる（二重表示によるズレ知覚を防ぐ）
-  });
+  }).catch(()=>{});
 }
 function removeDocImage(){ if(docImage){ docImage.remove(); docImage = null; } docCard.style.visibility = ''; }
 // 氏名などの編集中は一旦ライブ表示に戻し、手が止まったら画像を作り直す
