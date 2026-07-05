@@ -335,6 +335,7 @@ let docImage = null, rerenderTimer = null;
 // でき上がった書類を画像化し、元の書類にぴったり重ねて表示する。
 // 表示されるのは本物の<img>なので、長押し（PCは右クリック）で写真に保存できる。
 function renderDocImage(){
+  docCard.style.visibility = ''; // 撮影のため確実に表示
   html2canvas(docCard, {backgroundColor:"#FFFFFF", scale:3}).then(canvas=>{
     if(phase !== 2) return; // 途中でリセットされたら破棄
     if(!docImage){
@@ -349,9 +350,10 @@ function renderDocImage(){
     docImage.style.top    = docCard.offsetTop  + 'px';
     docImage.style.width  = docCard.offsetWidth  + 'px';
     docImage.style.height = docCard.offsetHeight + 'px';
+    docCard.style.visibility = 'hidden'; // 生書類は隠し、画像だけを見せる（二重表示によるズレ知覚を防ぐ）
   });
 }
-function removeDocImage(){ if(docImage){ docImage.remove(); docImage = null; } }
+function removeDocImage(){ if(docImage){ docImage.remove(); docImage = null; } docCard.style.visibility = ''; }
 // 氏名などの編集中は一旦ライブ表示に戻し、手が止まったら画像を作り直す
 function refreshDocImage(){
   if(phase !== 2) return;
